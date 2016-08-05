@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Js API</title>
+        <style>
+        body {
+            background-color: #ccc;
+        }
+
+        #content {
+            width: 300px;
+            margin-top: 20px;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: white;
+            padding: 20px;
+        }
+        </style>
+    </head>
+    <body>
+      <div id="content">
+        <div>
+          <h2>Sample Gimmie JS App</h2>
+          <form>
+            <label for="event_name_field">Event name</label>
+            <input type="text" name="event_name" id="event_name_field" value="login">
+            <br/>
+            <label for="uid_field">UID</label>
+            <input type="text" name="uid" id="uid_field" value="example_user">
+            <br/>
+            <button type="button" id="event_submit">POST</button>
+          </form>
+        </div>
+        <div>
+          <fieldset>
+            <legend>Response</legend>
+            <div id="response_contents"></div>
+        </div>
+      </div>
+
+        <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/hmac-sha1.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/enc-base64-min.js"></script>
+        <script src="js/oauth-1.0a.js"></script>
+        <script src="js/gimmie.js"></script>
+        <script>
+          $('#event_submit').click(function(e){
+            var api = Gimmie({
+              "key"     : "some_client_key",
+              "secret"  : "some_client_secret",
+              "user"    : {
+                "uid": $('#event_name_field').val()
+              },
+              "apiHostname": "your-domain.gimmie.io"
+            });
+            api.trigger($('#event_name_field').val(), {device: 'ios'},
+            function(statusCode) {
+              $('#response_contents').html("Success! Status Code: "+String(statusCode));
+            }, function(statusCode) {
+              $('#response_contents').html("Fail! Status Code: "+String(statusCode));
+            })
+          })
+        </script>
+    </body>
+</html>
