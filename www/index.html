@@ -4,15 +4,14 @@
         <title>Js API</title>
         <style>
         body {
-            background-color: #ccc;
+            background-color: white;
         }
 
         #content {
-            width: 300px;
+            width: 800px;
             margin-top: 20px;
             margin-left: auto;
             margin-right: auto;
-            background-color: white;
             padding: 20px;
         }
         </style>
@@ -32,9 +31,8 @@
           </form>
         </div>
         <div>
-          <fieldset>
-            <legend>Response</legend>
-            <div id="response_contents"></div>
+          <h4>Response</h4>
+          <div id="response_contents"></div>
         </div>
       </div>
 
@@ -42,22 +40,20 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/hmac-sha1.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/enc-base64-min.js"></script>
         <script src="js/oauth-1.0a.js"></script>
-        <script src="js/gimmie.js"></script>
+        <script src="js/gimmie-api.js"></script>
         <script>
           $('#event_submit').click(function(e){
-            var api = Gimmie({
-              "key"     : "some_client_key",
-              "secret"  : "some_client_secret",
-              "user"    : {
-                "uid": $('#event_name_field').val()
-              },
-              "apiHostname": "your-domain.gimmie.io"
+            var api = GimmieAPI({
+              "client_key"     : "some_client_key",
+              "client_secret"  : "some_client_secret",
+              "api_root": "http://your-domain.gimmie.io",
+              "uid": $('#event_name_field').val()
             });
             api.trigger($('#event_name_field').val(), {device: 'ios'},
-            function(statusCode) {
-              $('#response_contents').html("Success! Status Code: "+String(statusCode));
-            }, function(statusCode) {
-              $('#response_contents').html("Fail! Status Code: "+String(statusCode));
+            function(eventResults) {
+              $('#response_contents').html("Success! Event Results: "+JSON.stringify(eventResults));
+            }, function(statusCode,errorMessage) {
+              $('#response_contents').html("Fail! Status Code: "+String(statusCode)+" Error Message: "+String(errorMessage));
             })
           })
         </script>
